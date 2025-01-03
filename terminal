@@ -1,0 +1,43 @@
+# Create and enter project directory
+mkdir spherex
+cd spherex
+
+# Frontend setup
+npx create-react-app frontend
+cd frontend
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled axios firebase react-router-dom date-fns
+
+# Backend setup
+cd ..
+mkdir backend
+cd backend
+npm init -y
+npm install express mongoose cors dotenv firebase-admin morgan multer helmet express-rate-limit winston jsonwebtoken uuid
+npm install nodemon --save-dev 
+
+# Frontend structure
+cd frontend
+mkdir -p src/{components,pages,services,utils,hooks,contexts,styles}
+mkdir -p public/images
+mkdir -p public/assets
+
+# Backend structure
+cd ../backend
+mkdir -p {config,controllers,middleware,models,routes,services,utils} 
+
+# Create public directory and subdirectories
+mkdir -p backend/public/images
+
+# Download placeholder images
+cd backend/public/images
+curl -o placeholder-news.jpg https://via.placeholder.com/800x400?text=News+Placeholder
+curl -o placeholder-project.jpg https://via.placeholder.com/800x400?text=Project+Placeholder
+curl -o placeholder-tool.jpg https://via.placeholder.com/800x400?text=Tool+Placeholder 
+
+# Terminal 1 - Start backend
+cd spherex/backend
+npm run dev
+
+# Terminal 2 - Start frontend
+cd spherex/frontend
+npm start 
