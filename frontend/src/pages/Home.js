@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Box, Button, Card, CardContent, Stack, Avatar } from '@mui/material';
+import { Container, Typography, Grid, Box, Button, Card, CardContent, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { 
   Code as CodeIcon, 
@@ -121,27 +121,14 @@ const TechStackSection = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(8),
 }));
 
-const TestimonialCard = styled(Card)(({ theme }) => ({
-  height: '100%',
-  padding: theme.spacing(4),
-  borderRadius: '24px',
-  background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
-  border: '1px solid rgba(0,0,0,0.08)',
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
-  }
-}));
-
 const WorkflowSection = styled(Box)(({ theme }) => ({
   background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
-  padding: theme.spacing(16, 0),
+  padding: theme.spacing(8, 0),
   position: 'relative',
   width: '100vw',
   marginLeft: 'calc(-50vw + 50%)',
   marginRight: 'calc(-50vw + 50%)',
-  minHeight: '600px',
+  minHeight: '300px',
   display: 'flex',
   alignItems: 'center',
   '&::before': {
@@ -470,14 +457,14 @@ const Home = () => {
           </Container>
         </TechStackSection>
 
-        {/* Workflow Section */}
+        {/* How It Works Section */}
         <WorkflowSection>
-          <Container maxWidth="lg">
+          <Container maxWidth="lg" sx={{ pb: 0 }}>
             <Typography 
               variant="h3" 
               sx={{ 
                 textAlign: 'center',
-                mb: 12,
+                mb: 8,
                 fontWeight: 800,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
                 background: 'linear-gradient(45deg, #1e1e2f, #6f9dff)',
@@ -488,93 +475,47 @@ const Home = () => {
             >
               How It Works
             </Typography>
-            <Grid container spacing={8}>
+            <Grid container spacing={4}>
               {[
                 { 
                   number: '01', 
                   title: 'Sign Up', 
-                  description: 'Create your account in seconds',
-                  gradient: 'linear-gradient(135deg, #6f9dff, #94b8ff)'
+                  description: 'Create your account in seconds'
                 },
                 { 
                   number: '02', 
                   title: 'Explore', 
-                  description: 'Discover projects and tools',
-                  gradient: 'linear-gradient(135deg, #7c4dff, #b388ff)'
+                  description: 'Discover projects and tools'
                 },
                 { 
                   number: '03', 
                   title: 'Connect', 
-                  description: 'Join the developer community',
-                  gradient: 'linear-gradient(135deg, #0288d1, #29b6f6)'
+                  description: 'Join the developer community'
                 },
                 { 
                   number: '04', 
                   title: 'Build', 
-                  description: 'Start creating amazing things',
-                  gradient: 'linear-gradient(135deg, #2e7d32, #66bb6a)'
+                  description: 'Start creating amazing things'
                 }
               ].map((step, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
-                  <Box 
-                    sx={{ 
-                      textAlign: 'center',
-                      position: 'relative',
-                      transition: 'transform 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-8px)'
-                      }
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: 'relative',
-                        mb: 3,
-                        '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          top: -10,
-                          left: -10,
-                          right: -10,
-                          bottom: -10,
-                          background: step.gradient,
-                          opacity: 0.1,
-                          borderRadius: '30px',
-                          transition: 'opacity 0.3s ease',
-                        }
-                      }}
-                    >
-                      <Typography 
-                        variant="h2" 
-                        sx={{ 
-                          background: step.gradient,
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          fontWeight: 800,
-                          fontSize: '5rem',
-                          lineHeight: 1
-                        }}
-                      >
-                        {step.number}
-                      </Typography>
-                    </Box>
+                  <Box sx={{ textAlign: 'center' }}>
                     <Typography 
-                      variant="h5" 
+                      variant="h2" 
                       sx={{ 
                         mb: 2, 
-                        fontWeight: 700,
-                        fontSize: '1.5rem'
+                        fontWeight: 800,
+                        background: 'linear-gradient(45deg, #1e1e2f, #6f9dff)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
                       }}
                     >
+                      {step.number}
+                    </Typography>
+                    <Typography variant="h5" sx={{ mb: 1, fontWeight: 600 }}>
                       {step.title}
                     </Typography>
-                    <Typography 
-                      color="text.secondary"
-                      sx={{
-                        fontSize: '1.1rem',
-                        lineHeight: 1.6
-                      }}
-                    >
+                    <Typography color="text.secondary">
                       {step.description}
                     </Typography>
                   </Box>
@@ -584,206 +525,7 @@ const Home = () => {
           </Container>
         </WorkflowSection>
 
-        {/* Testimonials Section */}
-        <Box sx={{ 
-          py: 16,
-          background: '#fff',
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          marginRight: 'calc(-50vw + 50%)',
-          minHeight: '600px',
-          display: 'flex',
-          alignItems: 'center',
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at 50% 0%, rgba(111, 157, 255, 0.05) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }
-        }}>
-          <Container maxWidth="lg">
-            <Typography 
-              variant="h3" 
-              sx={{ 
-                textAlign: 'center',
-                mb: 12,
-                fontWeight: 800,
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
-                background: 'linear-gradient(45deg, #1e1e2f, #6f9dff)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                letterSpacing: '-0.02em'
-              }}
-            >
-              What Developers Say
-            </Typography>
-            <Grid container spacing={6}>
-              {[
-                {
-                  name: 'Alex Chen',
-                  role: 'Full Stack Developer',
-                  content: 'This platform has revolutionized how I discover and share developer tools. The community is incredibly supportive.',
-                  avatar: '/images/avatars/avatar1.jpg'
-                },
-                {
-                  name: 'Sarah Johnson',
-                  role: 'Frontend Engineer',
-                  content: 'The quality of projects and tools available here is outstanding. It\'s become an essential part of my development workflow.',
-                  avatar: '/images/avatars/avatar2.jpg'
-                },
-                {
-                  name: 'Michael Brown',
-                  role: 'DevOps Engineer',
-                  content: 'The platform\'s focus on security and performance makes it stand out. It\'s a game-changer for the developer community.',
-                  avatar: '/images/avatars/avatar3.jpg'
-                }
-              ].map((testimonial, index) => (
-                <Grid item xs={12} md={4} key={index}>
-                  <TestimonialCard
-                    sx={{
-                      position: 'relative',
-                      overflow: 'visible',
-                      '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #6f9dff, #94b8ff)',
-                        borderRadius: '4px 4px 0 0'
-                      }
-                    }}
-                  >
-                    <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Avatar 
-                        src={testimonial.avatar}
-                        sx={{ 
-                          width: 64, 
-                          height: 64,
-                          border: '3px solid #fff',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                        }}
-                      />
-                      <Box>
-                        <Typography 
-                          variant="h6" 
-                          sx={{ 
-                            fontWeight: 700,
-                            fontSize: '1.2rem',
-                            mb: 0.5
-                          }}
-                        >
-                          {testimonial.name}
-                        </Typography>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            color: 'text.secondary',
-                            fontSize: '0.95rem'
-                          }}
-                        >
-                          {testimonial.role}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Typography 
-                      sx={{ 
-                        lineHeight: 1.8,
-                        fontSize: '1.1rem',
-                        color: 'text.secondary',
-                        fontStyle: 'italic'
-                      }}
-                    >
-                      "{testimonial.content}"
-                    </Typography>
-                  </TestimonialCard>
-                </Grid>
-              ))}
-            </Grid>
-          </Container>
-        </Box>
       </Container>
-
-      <Box 
-        sx={{ 
-          width: '100%',
-          background: 'linear-gradient(135deg, #1e1e2f 0%, #2c2c44 100%)',
-          py: 12,
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at 50% 50%, rgba(111, 157, 255, 0.08) 0%, rgba(30, 30, 47, 0) 50%)',
-            pointerEvents: 'none',
-          }
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box sx={{ 
-            textAlign: 'center',
-            position: 'relative',
-            zIndex: 1
-          }}>
-            <Typography 
-              variant="h4" 
-              gutterBottom 
-              sx={{ 
-                fontWeight: 600,
-                color: '#fff',
-                fontSize: { xs: '1.75rem', md: '2.25rem' }
-              }}
-            >
-              Ready to Get Started?
-            </Typography>
-            <Typography 
-              variant="body1" 
-              sx={{ 
-                mb: 4,
-                maxWidth: '600px',
-                mx: 'auto',
-                px: 2,
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontSize: { xs: '1rem', md: '1.1rem' }
-              }}
-            >
-              Join our community and start exploring the possibilities
-            </Typography>
-            <Button
-              component={Link}
-              to="/auth"
-              variant="contained"
-              size="large"
-              sx={{
-                backgroundColor: '#6f9dff',
-                padding: '16px 40px',
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                borderRadius: '12px',
-                textTransform: 'none',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  backgroundColor: '#94b8ff',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 24px rgba(111, 157, 255, 0.3)',
-                },
-              }}
-            >
-              Join Now
-            </Button>
-          </Box>
-        </Container>
-      </Box>
     </Box>
   );
 };

@@ -12,9 +12,7 @@ node_modules/
 frontend/.env
 backend/.env
 
-# Firebase
-**/firebase-adminsdk*.json
-**/firebase-key.json
+
 
 # Build files
 /build
@@ -47,7 +45,3 @@ Thumbs.db
 *.cert
 *.key
 
-# Add these lines to existing .gitignore
-ver-1-7a8c3-firebase-adminsdk*.json
-firebase-key.json ver-1-7a8c3-firebase-adminsdk-cig5r-c16f0fbbc6.json
-ver-1-7a8c3-firebase-adminsdk-cig5r-c16f0fbbc6.json
