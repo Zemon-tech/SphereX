@@ -17,13 +17,13 @@ import { Close as CloseIcon } from '@mui/icons-material';
 
 const categories = ['technology', 'development', 'ai', 'blockchain', 'other'];
 
-const AddNewsDialog = ({ open, onClose, onSubmit }) => {
+const EditNewsDialog = ({ open, onClose, onSubmit, news }) => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    content: '',
-    imageUrl: '',
-    category: 'technology'
+    title: news.title,
+    description: news.description,
+    content: news.content,
+    imageUrl: news.imageUrl,
+    category: news.category
   });
 
   const handleChange = (e) => {
@@ -36,13 +36,6 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    setFormData({
-      title: '',
-      description: '',
-      content: '',
-      imageUrl: '',
-      category: 'technology'
-    });
   };
 
   return (
@@ -68,7 +61,7 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
         py: 2
       }}>
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          Add New Article
+          Edit Article
         </Typography>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
@@ -183,7 +176,7 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
               }
             }}
           >
-            Add Article
+            Update
           </Button>
         </DialogActions>
       </form>
@@ -191,4 +184,4 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
   );
 };
 
-export default AddNewsDialog; 
+export default EditNewsDialog; 

@@ -9,14 +9,110 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Avatar
+  Avatar,
+  Box,
+  alpha
 } from '@mui/material';
 import { useState } from 'react';
 
+// Enhanced styled components
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  background: 'linear-gradient(to right, #1e1e2f, #2c2c44)',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+  height: '60px',
+  justifyContent: 'center',
+}));
+
+const StyledToolbar = styled(Toolbar)({
+  minHeight: '60px !important',
+  padding: '0 24px !important',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+const LogoTypography = styled(Typography)(({ theme }) => ({
+  fontWeight: 700,
+  background: 'linear-gradient(45deg, #ffffff, #6f9dff)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  letterSpacing: '1.5px',
+  fontSize: '1.5rem',
+  fontFamily: "'Poppins', sans-serif",
+  textTransform: 'uppercase',
+  '&:hover': {
+    background: 'linear-gradient(45deg, #ffffff, #94b8ff)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+  },
+}));
+
+const NavButton = styled(Button)(({ theme }) => ({
+  color: '#fff',
+  margin: '0 4px',
+  padding: '6px 12px',
+  borderRadius: '6px',
+  textTransform: 'none',
+  fontSize: '0.9rem',
+  fontWeight: 500,
+  letterSpacing: '0.3px',
+  transition: 'all 0.2s ease-in-out',
+  opacity: 0.85,
+  '&:hover': {
+    background: alpha('#fff', 0.08),
+    transform: 'translateY(-1px)',
+    opacity: 1,
+  },
+}));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  width: 32,
+  height: 32,
+  cursor: 'pointer',
+  border: '2px solid rgba(255, 255, 255, 0.2)',
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': {
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    transform: 'scale(1.05)',
+  },
+}));
+
+const NavLinks = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+});
+
 const StyledLink = styled(Link)({
   textDecoration: 'none',
-  color: 'inherit'
+  color: 'inherit',
 });
+
+const StyledMenu = styled(Menu)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: '8px',
+    marginTop: '8px',
+    minWidth: '180px',
+    background: '#1e1e2f',
+    color: '#fff',
+    boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    '& .MuiMenu-list': {
+      padding: '4px',
+    },
+    '& .MuiMenuItem-root': {
+      padding: '10px 16px',
+      borderRadius: '6px',
+      margin: '2px 0',
+      fontSize: '0.9rem',
+      transition: 'all 0.2s',
+      color: '#fff',
+      '&:hover': {
+        backgroundColor: alpha('#fff', 0.08),
+      },
+    },
+  },
+}));
 
 const Navbar = () => {
   const { currentUser, isAdmin, logout } = useAuth();
@@ -42,57 +138,85 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <StyledLink to="/">SphereX</StyledLink>
-        </Typography>
+    <StyledAppBar position="sticky">
+      <StyledToolbar>
+        <StyledLink to="/">
+          <LogoTypography variant="h6">
+            SphereX
+          </LogoTypography>
+        </StyledLink>
 
-        <Button color="inherit" component={StyledLink} to="/tech-news">
-          Tech News
-        </Button>
-        <Button color="inherit" component={StyledLink} to="/projects">
-          Projects
-        </Button>
-        <Button color="inherit" component={StyledLink} to="/webstore">
-          WebStore
-        </Button>
+        <NavLinks>
+          <NavButton component={StyledLink} to="/tech-news">
+            Tech News
+          </NavButton>
+          <NavButton component={StyledLink} to="/projects">
+            Projects
+          </NavButton>
+          <NavButton component={StyledLink} to="/webstore">
+            WebStore
+          </NavButton>
 
-        {currentUser ? (
-          <>
-            {isAdmin && (
-              <Button 
-                color="inherit" 
-                component={Link} 
-                to="/admin"
-                sx={{ mr: 2 }}
+          {currentUser ? (
+            <>
+              {isAdmin && (
+                <NavButton 
+                  component={Link} 
+                  to="/admin"
+                  sx={{ 
+                    background: alpha('#fff', 0.1),
+                    '&:hover': {
+                      background: alpha('#fff', 0.15),
+                    }
+                  }}
+                >
+                  Admin Panel
+                </NavButton>
+              )}
+              <IconButton onClick={handleMenu} sx={{ ml: 1 }}>
+                <StyledAvatar 
+                  src={currentUser.photoURL} 
+                  alt={currentUser.displayName}
+                >
+                  {currentUser.displayName?.charAt(0)}
+                </StyledAvatar>
+              </IconButton>
+              <StyledMenu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
               >
-                Admin Panel
-              </Button>
-            )}
-            <IconButton onClick={handleMenu} color="inherit">
-              <Avatar src={currentUser.photoURL} alt={currentUser.displayName}>
-                {currentUser.displayName?.charAt(0)}
-              </Avatar>
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
+                <MenuItem component={Link} to="/profile" onClick={handleClose}>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </StyledMenu>
+            </>
+          ) : (
+            <NavButton 
+              component={StyledLink} 
+              to="/auth"
+              sx={{
+                border: '1px solid rgba(255,255,255,0.3)',
+                '&:hover': {
+                  border: '1px solid rgba(255,255,255,0.5)',
+                }
+              }}
             >
-              <MenuItem component={Link} to="/profile" onClick={handleClose}>
-                Profile
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </>
-        ) : (
-          <Button color="inherit" component={StyledLink} to="/auth">
-            Login
-          </Button>
-        )}
-      </Toolbar>
-    </AppBar>
+              Login
+            </NavButton>
+          )}
+        </NavLinks>
+      </StyledToolbar>
+    </StyledAppBar>
   );
 };
 

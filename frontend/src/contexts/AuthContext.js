@@ -1,12 +1,14 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../config/firebase';
+import api from '../services/api';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   updateProfile,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  GithubAuthProvider
 } from 'firebase/auth';
 
 const AuthContext = createContext();
@@ -44,6 +46,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithGithub = async () => {
+    const provider = new GithubAuthProvider();
+    return signInWithPopup(auth, provider);
+  };
+
   const logout = () => {
     return signOut(auth);
   };
@@ -53,11 +60,45 @@ export const AuthProvider = ({ children }) => {
     return adminEmails.includes(email);
   };
 
+  const updateUserProfile = async (profileData) => {
+    if (!currentUser) return;
+    
+    try {
+      // Update Firebase auth profile
+      if (profileData.displayName || profileData.photoURL) {
+        await updateProfile(currentUser, {
+          displayName: profileData.displayName || currentUser.displayName,
+          photoURL: profileData.photoURL || currentUser.photoURL
+        });
+      }
+      return true;
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+    }
+  };
+
+  const createUserInDB = async (user) => {
+    try {
+      await api.post('/users', {
+        email: user.email,
+        name: user.displayName || '',
+        firebaseUid: user.uid
+      });
+    } catch (error) {
+      // If user already exists, that's fine
+      if (error.response?.status !== 400) {
+        console.error('Error creating user in DB:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setCurrentUser(user);
         setIsAdmin(isAdminEmail(user.email));
+        await createUserInDB(user);
       } else {
         setCurrentUser(null);
         setIsAdmin(false);
@@ -74,7 +115,9 @@ export const AuthProvider = ({ children }) => {
     signup,
     login,
     loginWithGoogle,
-    logout
+    loginWithGithub,
+    logout,
+    updateUserProfile
   };
 
   return (

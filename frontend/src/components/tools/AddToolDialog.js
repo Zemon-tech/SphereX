@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
@@ -11,9 +10,10 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Chip,
-  Stack
+  Typography,
+  IconButton
 } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 const categories = ['development', 'productivity', 'design', 'testing', 'other'];
 
@@ -21,34 +21,15 @@ const AddToolDialog = ({ open, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    price: 'Free',
     category: 'development',
-    link: '',
     imageUrl: '',
-    tags: []
+    websiteUrl: '',
+    pricing: 'free'
   });
-  const [tagInput, setTagInput] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddTag = (e) => {
-    if (e.key === 'Enter' && tagInput.trim()) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...prev.tags, tagInput.trim()]
-      }));
-      setTagInput('');
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
-    }));
   };
 
   const handleSubmit = () => {
@@ -56,19 +37,45 @@ const AddToolDialog = ({ open, onClose, onSubmit }) => {
     setFormData({
       name: '',
       description: '',
-      price: 'Free',
       category: 'development',
-      link: '',
       imageUrl: '',
-      tags: []
+      websiteUrl: '',
+      pricing: 'free'
     });
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Add New Tool</DialogTitle>
-      <DialogContent>
-        <Box sx={{ mt: 2 }}>
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      fullWidth 
+      maxWidth="sm"
+      PaperProps={{
+        sx: {
+          borderRadius: '16px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+        }
+      }}
+    >
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
+        borderBottom: '1px solid rgba(0,0,0,0.08)',
+        px: 3,
+        py: 2
+      }}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Add New Tool
+        </Typography>
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      <DialogContent sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
           <TextField
             name="name"
             label="Tool Name"
@@ -76,7 +83,11 @@ const AddToolDialog = ({ open, onClose, onSubmit }) => {
             onChange={handleChange}
             fullWidth
             required
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
             name="description"
@@ -85,26 +96,24 @@ const AddToolDialog = ({ open, onClose, onSubmit }) => {
             onChange={handleChange}
             fullWidth
             multiline
-            rows={3}
+            rows={4}
             required
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
-          <TextField
-            name="price"
-            label="Price"
-            value={formData.price}
-            onChange={handleChange}
-            fullWidth
-            placeholder="Free or enter price"
-            sx={{ mb: 2 }}
-          />
-          <FormControl fullWidth sx={{ mb: 2 }}>
+          <FormControl fullWidth>
             <InputLabel>Category</InputLabel>
             <Select
               name="category"
               value={formData.category}
               label="Category"
               onChange={handleChange}
+              sx={{
+                borderRadius: '12px'
+              }}
             >
               {categories.map((cat) => (
                 <MenuItem key={cat} value={cat}>
@@ -114,46 +123,76 @@ const AddToolDialog = ({ open, onClose, onSubmit }) => {
             </Select>
           </FormControl>
           <TextField
-            name="link"
-            label="Tool Link"
-            value={formData.link}
-            onChange={handleChange}
-            fullWidth
-            required
-            sx={{ mb: 2 }}
-          />
-          <TextField
             name="imageUrl"
             label="Image URL"
             value={formData.imageUrl}
             onChange={handleChange}
             fullWidth
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
-            label="Add Tags"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleAddTag}
+            name="websiteUrl"
+            label="Website URL"
+            value={formData.websiteUrl}
+            onChange={handleChange}
             fullWidth
-            helperText="Press Enter to add tags"
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
-          <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap', gap: 1 }}>
-            {formData.tags.map((tag, index) => (
-              <Chip
-                key={index}
-                label={tag}
-                onDelete={() => handleRemoveTag(tag)}
-                size="small"
-              />
-            ))}
-          </Stack>
+          <FormControl fullWidth>
+            <InputLabel>Pricing</InputLabel>
+            <Select
+              name="pricing"
+              value={formData.pricing}
+              label="Pricing"
+              onChange={handleChange}
+              sx={{
+                borderRadius: '12px'
+              }}
+            >
+              <MenuItem value="free">Free</MenuItem>
+              <MenuItem value="paid">Paid</MenuItem>
+              <MenuItem value="freemium">Freemium</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained">
+
+      <DialogActions sx={{ 
+        p: 3, 
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
+        borderTop: '1px solid rgba(0,0,0,0.08)'
+      }}>
+        <Button 
+          onClick={onClose}
+          sx={{ 
+            borderRadius: '10px',
+            px: 3
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          sx={{
+            borderRadius: '10px',
+            px: 3,
+            background: 'linear-gradient(45deg, #1e1e2f 30%, #6f9dff 90%)',
+            boxShadow: '0 4px 12px rgba(111, 157, 255, 0.2)',
+            '&:hover': {
+              background: 'linear-gradient(45deg, #1e1e2f 60%, #6f9dff 90%)',
+              boxShadow: '0 6px 16px rgba(111, 157, 255, 0.3)',
+            }
+          }}
+        >
           Add Tool
         </Button>
       </DialogActions>

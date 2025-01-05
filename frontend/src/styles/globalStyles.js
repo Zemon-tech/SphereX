@@ -3,32 +3,56 @@ import { createTheme } from '@mui/material';
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
+      main: '#1e1e2f',
+      light: '#2c2c44',
+      dark: '#15151f',
     },
     secondary: {
-      main: '#dc004e',
-      light: '#ff4081',
-      dark: '#c51162',
+      main: '#6f9dff',
+      light: '#94b8ff',
+      dark: '#5a7fcf',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#f8f9fa',
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#1e1e2f',
+      secondary: '#666666',
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: "'Poppins', 'Roboto', 'Helvetica', 'Arial', sans-serif",
     h1: {
-      fontSize: '2.5rem',
-      fontWeight: 500,
+      fontWeight: 700,
+      fontSize: '3rem',
+      letterSpacing: '0.5px',
     },
     h2: {
-      fontSize: '2rem',
-      fontWeight: 500,
+      fontWeight: 600,
+      fontSize: '2.5rem',
+      letterSpacing: '0.3px',
     },
     h3: {
-      fontSize: '1.75rem',
+      fontWeight: 600,
+      fontSize: '2rem',
+      letterSpacing: '0.2px',
+    },
+    h4: {
+      fontWeight: 600,
+      fontSize: '1.5rem',
+    },
+    h5: {
       fontWeight: 500,
+      fontSize: '1.25rem',
+    },
+    h6: {
+      fontWeight: 500,
+      fontSize: '1rem',
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.7,
     },
   },
   components: {
@@ -36,13 +60,16 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
+          borderRadius: '6px',
+          fontWeight: 500,
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: '8px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
         },
       },
     },

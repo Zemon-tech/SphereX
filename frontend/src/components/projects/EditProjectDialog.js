@@ -11,19 +11,23 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Stack
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 
-const categories = ['technology', 'development', 'ai', 'blockchain', 'other'];
+const categories = ['web', 'mobile', 'desktop', 'ai', 'blockchain', 'other'];
 
-const AddNewsDialog = ({ open, onClose, onSubmit }) => {
+const EditProjectDialog = ({ open, onClose, onSubmit, project }) => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    content: '',
-    imageUrl: '',
-    category: 'technology'
+    title: project?.title || '',
+    description: project?.description || '',
+    content: project?.content || '',
+    category: project?.category || 'web',
+    imageUrl: project?.imageUrl || '',
+    githubUrl: project?.githubUrl || '',
+    demoUrl: project?.demoUrl || '',
+    tags: project?.tags?.join(', ') || ''
   });
 
   const handleChange = (e) => {
@@ -35,21 +39,18 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      title: '',
-      description: '',
-      content: '',
-      imageUrl: '',
-      category: 'technology'
-    });
+    const submitData = {
+      ...formData,
+      tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+    };
+    onSubmit(submitData);
   };
 
   return (
     <Dialog 
       open={open} 
       onClose={onClose} 
-      maxWidth="sm" 
+      maxWidth="md" 
       fullWidth
       PaperProps={{
         sx: {
@@ -68,7 +69,7 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
         py: 2
       }}>
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          Add New Article
+          Edit Project
         </Typography>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
@@ -77,7 +78,7 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
 
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ p: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+          <Stack spacing={2.5}>
             <TextField
               label="Title"
               name="title"
@@ -121,19 +122,6 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
                 }
               }}
             />
-            <TextField
-              label="Image URL"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              fullWidth
-              required
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '12px'
-                }
-              }}
-            />
             <FormControl fullWidth>
               <InputLabel>Category</InputLabel>
               <Select
@@ -152,7 +140,62 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
+            <TextField
+              label="Image URL"
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleChange}
+              fullWidth
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px'
+                }
+              }}
+            />
+            <Box sx={{ 
+              display: 'grid', 
+              gridTemplateColumns: '1fr 1fr',
+              gap: 2.5
+            }}>
+              <TextField
+                label="GitHub URL"
+                name="githubUrl"
+                value={formData.githubUrl}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px'
+                  }
+                }}
+              />
+              <TextField
+                label="Demo URL"
+                name="demoUrl"
+                value={formData.demoUrl}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px'
+                  }
+                }}
+              />
+            </Box>
+            <TextField
+              label="Tags"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              fullWidth
+              helperText="Enter tags separated by commas"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px'
+                }
+              }}
+            />
+          </Stack>
         </DialogContent>
         
         <DialogActions sx={{ 
@@ -183,7 +226,7 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
               }
             }}
           >
-            Add Article
+            Update Project
           </Button>
         </DialogActions>
       </form>
@@ -191,4 +234,4 @@ const AddNewsDialog = ({ open, onClose, onSubmit }) => {
   );
 };
 
-export default AddNewsDialog; 
+export default EditProjectDialog; 

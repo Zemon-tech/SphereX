@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
@@ -12,8 +11,11 @@ import {
   Select,
   MenuItem,
   Chip,
-  Stack
+  Stack,
+  IconButton,
+  Typography
 } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 const categories = ['web', 'mobile', 'desktop', 'ai', 'blockchain', 'other'];
 
@@ -67,10 +69,37 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Add New Project</DialogTitle>
-      <DialogContent>
-        <Box sx={{ mt: 2 }}>
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      fullWidth 
+      maxWidth="sm"
+      PaperProps={{
+        sx: {
+          borderRadius: '16px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+        }
+      }}
+    >
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
+        borderBottom: '1px solid rgba(0,0,0,0.08)',
+        px: 3,
+        py: 2
+      }}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Add New Project
+        </Typography>
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      
+      <DialogContent sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
           <TextField
             name="title"
             label="Title"
@@ -78,7 +107,11 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             onChange={handleChange}
             fullWidth
             required
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
             name="description"
@@ -89,7 +122,11 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             multiline
             rows={2}
             required
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
             name="content"
@@ -100,15 +137,22 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             multiline
             rows={4}
             required
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
-          <FormControl fullWidth sx={{ mb: 2 }}>
+          <FormControl fullWidth>
             <InputLabel>Category</InputLabel>
             <Select
               name="category"
               value={formData.category}
               label="Category"
               onChange={handleChange}
+              sx={{
+                borderRadius: '12px'
+              }}
             >
               {categories.map((cat) => (
                 <MenuItem key={cat} value={cat}>
@@ -123,7 +167,11 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             value={formData.imageUrl}
             onChange={handleChange}
             fullWidth
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
             name="githubUrl"
@@ -131,7 +179,11 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             value={formData.githubUrl}
             onChange={handleChange}
             fullWidth
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
             name="demoUrl"
@@ -139,7 +191,11 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             value={formData.demoUrl}
             onChange={handleChange}
             fullWidth
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
           <TextField
             label="Add Tags"
@@ -148,23 +204,61 @@ const AddProjectDialog = ({ open, onClose, onSubmit }) => {
             onKeyDown={handleAddTag}
             fullWidth
             helperText="Press Enter to add tags"
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px'
+              }
+            }}
           />
-          <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap', gap: 1 }}>
+          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
             {formData.tags.map((tag, index) => (
               <Chip
                 key={index}
                 label={tag}
                 onDelete={() => handleRemoveTag(tag)}
                 size="small"
+                sx={{
+                  borderRadius: '8px',
+                  background: 'rgba(111, 157, 255, 0.1)',
+                  color: '#6f9dff',
+                  '& .MuiChip-deleteIcon': {
+                    color: '#6f9dff'
+                  }
+                }}
               />
             ))}
           </Stack>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained">
+
+      <DialogActions sx={{ 
+        p: 3, 
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
+        borderTop: '1px solid rgba(0,0,0,0.08)'
+      }}>
+        <Button 
+          onClick={onClose}
+          sx={{ 
+            borderRadius: '10px',
+            px: 3
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          sx={{
+            borderRadius: '10px',
+            px: 3,
+            background: 'linear-gradient(45deg, #1e1e2f 30%, #6f9dff 90%)',
+            boxShadow: '0 4px 12px rgba(111, 157, 255, 0.2)',
+            '&:hover': {
+              background: 'linear-gradient(45deg, #1e1e2f 60%, #6f9dff 90%)',
+              boxShadow: '0 6px 16px rgba(111, 157, 255, 0.3)',
+            }
+          }}
+        >
           Add Project
         </Button>
       </DialogActions>

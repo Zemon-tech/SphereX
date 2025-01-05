@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const projectSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   description: {
     type: String,
@@ -15,7 +16,8 @@ const projectSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: true
+    required: true,
+    enum: ['web', 'mobile', 'desktop', 'ai', 'blockchain', 'other']
   },
   tags: [{
     type: String
@@ -25,7 +27,8 @@ const projectSchema = new mongoose.Schema({
   demoUrl: String,
   author: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   createdAt: {
     type: Date,

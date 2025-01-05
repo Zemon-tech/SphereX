@@ -45,4 +45,8 @@ Thumbs.db
 # Misc
 *.pem
 *.cert
-*.key 
+*.key
+
+# Add these lines to existing .gitignore
+ver-1-7a8c3-firebase-adminsdk*.json
+firebase-key.json 

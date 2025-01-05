@@ -1,0 +1,38 @@
+.tech-stack {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.tech-stack h2 {
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.tech-icons {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tech-item img {
+  width: 64px;
+  height: 64px;
+  transition: transform 0.2s ease;
+}
+
+.tech-item img:hover {
+  transform: scale(1.1);
+}
+
+.tech-item span {
+  font-size: 1rem;
+  color: #666;
+} 

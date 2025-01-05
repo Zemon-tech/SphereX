@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
+    default: '',
     trim: true
   },
   firebaseUid: {
@@ -23,6 +23,30 @@ const UserSchema = new mongoose.Schema({
     default: 'user'
   },
   profileImage: {
+    type: String,
+    default: ''
+  },
+  college: {
+    type: String,
+    default: ''
+  },
+  branch: {
+    type: String,
+    default: ''
+  },
+  linkedinId: {
+    type: String,
+    default: ''
+  },
+  githubId: {
+    type: String,
+    default: ''
+  },
+  instagramId: {
+    type: String,
+    default: ''
+  },
+  mobileNumber: {
     type: String,
     default: ''
   },

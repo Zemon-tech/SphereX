@@ -1,115 +1,205 @@
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Box,
-  Chip,
-  CardActionArea,
-  IconButton,
-  Menu,
-  MenuItem
-} from '@mui/material';
-import { MoreVert as MoreVertIcon } from '@mui/icons-material';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { Card, CardContent, CardMedia, Typography, Box, IconButton, Chip } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import { useState } from 'react';
+import EditNewsDialog from './EditNewsDialog';
 
-const NewsCard = ({ news, onDelete }) => {
-  const navigate = useNavigate();
-  const { isAdmin } = useAuth();
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = () => {
-    navigate(`/tech-news/${news._id}`);
-  };
-
-  const handleMenuOpen = (event) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = (event) => {
-    event?.stopPropagation();
-    setAnchorEl(null);
-  };
-
-  const handleDelete = async (event) => {
-    event.stopPropagation();
-    try {
-      await api.delete(`/news/${news._id}`);
-      onDelete(news._id);
-    } catch (error) {
-      console.error('Error deleting news:', error);
+const StyledCard = styled(Card)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+  borderRadius: '16px',
+  overflow: 'hidden',
+  transition: 'all 0.3s ease',
+  background: '#fff',
+  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+    '& .card-media': {
+      transform: 'scale(1.05)',
     }
-    handleMenuClose();
+  }
+}));
+
+const CardMediaWrapper = styled(Box)({
+  position: 'relative',
+  height: '280px',
+  overflow: 'hidden',
+});
+
+const StyledCardMedia = styled(CardMedia)({
+  height: '100%',
+  transition: 'transform 0.3s ease',
+  objectFit: 'cover',
+  objectPosition: 'center',
+});
+
+const CategoryChip = styled(Chip)(({ theme }) => ({
+  backgroundColor: 'rgba(111, 157, 255, 0.9)',
+  color: '#fff',
+  fontWeight: 500,
+  textTransform: 'capitalize',
+  marginRight: theme.spacing(1),
+}));
+
+const DeleteButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.error.main,
+  padding: '4px',
+  '&:hover': {
+    backgroundColor: theme.palette.error.light,
+    color: '#fff',
+  }
+}));
+
+const StyledLink = styled(Link)({
+  textDecoration: 'none',
+  color: 'inherit',
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+});
+
+const CardHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: theme.spacing(2, 2, 1, 2),
+}));
+
+const ButtonGroup = styled(Box)({
+  display: 'flex',
+  gap: '4px'
+});
+
+const EditButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  padding: '4px',
+  '&:hover': {
+    backgroundColor: theme.palette.primary.light,
+    color: '#fff',
+  }
+}));
+
+const NewsCard = ({ news, onDelete, onEdit, isAdmin }) => {
+  const { _id, title, description, imageUrl, category, createdAt } = news;
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+
+  const formatDate = (date) => {
+    const options = { year: 'numeric', month: 'short', day: '2-digit' };
+    return new Date(date).toLocaleDateString('en-US', options);
   };
 
-  const imageUrl = news.imageUrl || 'https://via.placeholder.com/800x400?text=News';
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await api.delete(`/news/${_id}`);
+      onDelete(_id);
+    } catch (err) {
+      console.error('Error deleting news:', err);
+    }
+  };
+
+  const handleEdit = async (updatedData) => {
+    try {
+      const response = await api.put(`/news/${news._id}`, updatedData);
+      onEdit(response);
+      setOpenEditDialog(false);
+    } catch (err) {
+      console.error('Error updating news:', err);
+    }
+  };
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-      {isAdmin && (
-        <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
-          <IconButton onClick={handleMenuOpen} sx={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-            onClick={(e) => e.stopPropagation()}
+    <StyledCard>
+      <StyledLink to={`/tech-news/${_id}`}>
+        <CardMediaWrapper>
+          <StyledCardMedia
+            className="card-media"
+            image={imageUrl || '/default-news.jpg'}
+            title={title}
+          />
+        </CardMediaWrapper>
+        
+        <CardHeader>
+          <CategoryChip label={category} size="small" />
+          {isAdmin && (
+            <ButtonGroup>
+              <EditButton
+                size="small"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenEditDialog(true);
+                }}
+                aria-label="edit"
+              >
+                <EditIcon fontSize="small" />
+              </EditButton>
+              <DeleteButton
+                size="small"
+                onClick={handleDelete}
+                aria-label="delete"
+              >
+                <DeleteIcon fontSize="small" />
+              </DeleteButton>
+            </ButtonGroup>
+          )}
+        </CardHeader>
+
+        <CardContent sx={{ pt: 0 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              fontSize: '1.1rem',
+              lineHeight: 1.3,
+              mb: 2,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
           >
-            <MenuItem onClick={handleDelete}>Delete</MenuItem>
-          </Menu>
-        </Box>
-      )}
-      <CardActionArea onClick={handleClick}>
-        <CardMedia
-          component="img"
-          height="200"
-          image={imageUrl}
-          alt={news.title}
-          onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/800x400?text=News';
-            e.target.onerror = null;
-          }}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="h2" noWrap>
-            {news.title}
+            {title}
           </Typography>
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              mb: 2,
               display: '-webkit-box',
               WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',
-              mb: 2
+              overflow: 'hidden',
+              lineHeight: 1.6
             }}
           >
-            {news.description}
+            {description}
           </Typography>
-          <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-            {Array.isArray(news.tags) && news.tags.map((tag, index) => (
-              <Chip
-                key={index}
-                label={tag}
-                size="small"
-                sx={{ fontSize: '0.75rem' }}
-              />
-            ))}
-          </Box>
-          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-            {new Date(news.createdAt).toLocaleDateString()}
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{
+              display: 'block',
+              textAlign: 'right',
+              mt: 'auto'
+            }}
+          >
+            {formatDate(createdAt)}
           </Typography>
         </CardContent>
-      </CardActionArea>
-    </Card>
+      </StyledLink>
+
+      <EditNewsDialog
+        open={openEditDialog}
+        onClose={() => setOpenEditDialog(false)}
+        onSubmit={handleEdit}
+        news={news}
+      />
+    </StyledCard>
   );
 };
 

@@ -74,4 +74,40 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Add this PUT route for updating news
+router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    console.log('Updating news with id:', req.params.id);
+    console.log('Update data:', req.body);
+
+    const newsId = req.params.id;
+    const updateData = {
+      ...req.body,
+      author: req.user.uid // Maintain the original author
+    };
+
+    // Handle tags if they're passed as a string
+    if (req.body.tags && typeof req.body.tags === 'string') {
+      updateData.tags = JSON.parse(req.body.tags);
+    }
+
+    const updatedNews = await News.findByIdAndUpdate(
+      newsId,
+      updateData,
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedNews) {
+      return res.status(404).json({ message: 'News not found' });
+    }
+
+    console.log('Updated news:', updatedNews);
+    res.json(updatedNews);
+
+  } catch (error) {
+    console.error('Error updating news:', error);
+    res.status(400).json({ message: 'Error updating news article' });
+  }
+});
+
 module.exports = router; 

@@ -7,7 +7,8 @@ const adminMiddleware = async (req, res, next) => {
     console.log('Admin emails:', adminEmails);
     console.log('Is admin?', adminEmails.includes(req.user.email));
     
-    if (!req.user || !adminEmails.includes(req.user.email)) {
+    // Allow if user is admin OR if they are the author of the content
+    if (!req.user || (!adminEmails.includes(req.user.email) && req.user.email !== req.body.author)) {
       return res.status(403).json({ message: 'Admin access required' });
     }
     

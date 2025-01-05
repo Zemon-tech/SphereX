@@ -31,14 +31,14 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST new project (admin only)
-router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
+// POST new project
+router.post('/', authMiddleware, async (req, res) => {
   try {
     console.log('Creating project with data:', req.body);
     
     const projectData = {
       ...req.body,
-      author: req.user.uid,
+      author: req.user.email,
       imageUrl: req.body.imageUrl || 'https://via.placeholder.com/800x400?text=Project'
     };
 
@@ -59,18 +59,50 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
   }
 });
 
-// DELETE project (admin only)
-router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
+// DELETE project
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    const projectId = req.params.id;
-    const deletedProject = await Project.findByIdAndDelete(projectId);
-    if (!deletedProject) {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
+
+    // Check if user is admin or project author
+    const adminEmails = ['shivangkandoi@gmail.com'];
+    if (!adminEmails.includes(req.user.email) && project.author !== req.user.email) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    await Project.findByIdAndDelete(req.params.id);
     res.json({ message: 'Project deleted successfully' });
   } catch (error) {
-    console.error('Error deleting project:', error);
     res.status(500).json({ message: 'Error deleting project' });
+  }
+});
+
+// Update project
+router.put('/:id', authMiddleware, async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    // Check if user is admin or project author
+    const adminEmails = ['shivangkandoi@gmail.com'];
+    if (!adminEmails.includes(req.user.email) && project.author !== req.user.email) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, author: project.author },
+      { new: true }
+    );
+
+    res.json(updatedProject);
+  } catch (error) {
+    res.status(400).json({ message: 'Error updating project' });
   }
 });
 

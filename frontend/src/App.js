@@ -13,14 +13,16 @@ import WebStore from './pages/WebStore';
 import Auth from './pages/Auth';
 import AdminPanel from './pages/AdminPanel';
 import Profile from './pages/Profile';
+import ProjectDetail from './pages/ProjectDetail';
+import ToolDetail from './pages/ToolDetail';
 
 // Create a wrapper component that uses useAuth
 const AppRoutes = () => {
   return (
     <Router>
-      <div className="app">
+      <div className="app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Navbar />
-        <main className="main-content">
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/tech-news" element={<TechNews />} />
@@ -44,6 +46,8 @@ const AppRoutes = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="/projects/:id" element={<ProjectDetail />} />
+            <Route path="/webstore/:id" element={<ToolDetail />} />
           </Routes>
         </main>
         <Footer />
