@@ -5,9 +5,11 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'">
+    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta
       name="description"
-      content="SphereX - Your platform for tech news, project showcase, and developer tools"
+      content="SphereX - Your comprehensive platform for tech news, project showcase, and developer tools"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
@@ -21,5 +23,11 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script>
+      // Prevent iframe embedding
+      if (window.self !== window.top) {
+        window.top.location.href = window.self.location.href;
+      }
+    </script>
   </body>
 </html> 
