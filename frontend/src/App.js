@@ -15,11 +15,18 @@ import AdminPanel from './pages/AdminPanel';
 import Profile from './pages/Profile';
 import ProjectDetail from './pages/ProjectDetail';
 import ToolDetail from './pages/ToolDetail';
+import ScrollToTop from './components/common/ScrollToTop';
+import Support from './pages/support/Support';
+import About from './pages/about/About';
+import Contact from './pages/contact/Contact';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import Founders from './pages/about/Founders';
 
 // Create a wrapper component that uses useAuth
 const AppRoutes = () => {
   return (
     <Router>
+      <ScrollToTop />
       <div className="app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Navbar />
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -48,6 +55,11 @@ const AppRoutes = () => {
             />
             <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/webstore/:id" element={<ToolDetail />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/founders" element={<Founders />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
           </Routes>
         </main>
         <Footer />

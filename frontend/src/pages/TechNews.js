@@ -12,7 +12,9 @@ import {
   Select,
   Alert,
   Button,
-  InputAdornment
+  InputAdornment,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
@@ -61,7 +63,8 @@ const FilterContainer = styled(Box)(({ theme }) => ({
   flexWrap: 'wrap',
   [theme.breakpoints.down('sm')]: {
     flexDirection: 'column',
-    gap: theme.spacing(1.5),
+    gap: theme.spacing(2),
+    padding: theme.spacing(2),
   }
 }));
 
@@ -89,6 +92,10 @@ const NewsSection = styled(Box)(({ theme }) => ({
   paddingTop: theme.spacing(12),
   paddingBottom: theme.spacing(12),
   position: 'relative',
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -105,6 +112,9 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(4, 0, 8),
   textAlign: 'center',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2, 0, 6),
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -145,6 +155,8 @@ const TechNews = () => {
   const [category, setCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -213,13 +225,14 @@ const TechNews = () => {
               textAlign: 'center',
               mb: 4,
               fontWeight: 800,
-              fontSize: { xs: '2.75rem', md: '3.75rem' },
+              fontSize: { xs: '2rem', sm: '2.75rem', md: '3.75rem' },
               background: 'linear-gradient(45deg, #1e1e2f 30%, #6f9dff 90%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               letterSpacing: '-0.02em',
               position: 'relative',
-              zIndex: 2
+              zIndex: 2,
+              px: { xs: 2, sm: 0 }
             }}
           >
             Latest Tech News
@@ -233,11 +246,12 @@ const TechNews = () => {
               maxWidth: '800px',
               mx: 'auto',
               lineHeight: 1.8,
-              fontSize: { xs: '1.2rem', md: '1.35rem' },
+              fontSize: { xs: '1rem', sm: '1.2rem', md: '1.35rem' },
               fontWeight: 400,
               mb: 6,
               position: 'relative',
               zIndex: 2,
+              px: { xs: 2, sm: 0 },
               '& strong': {
                 color: '#6f9dff',
                 fontWeight: 600
@@ -249,7 +263,12 @@ const TechNews = () => {
         </HeaderSection>
 
         <FilterContainer>
-          <StyledFormControl fullWidth sx={{ flex: 2 }}>
+          <StyledFormControl 
+            fullWidth 
+            sx={{ 
+              flex: { xs: '1 1 100%', md: 2 }
+            }}
+          >
             <TextField
               placeholder="Search articles..."
               value={searchQuery}
@@ -265,7 +284,11 @@ const TechNews = () => {
             />
           </StyledFormControl>
 
-          <StyledFormControl sx={{ width: '180px' }}>
+          <StyledFormControl 
+            sx={{ 
+              width: { xs: '100%', md: '180px' }
+            }}
+          >
             <InputLabel>Category</InputLabel>
             <Select
               value={category}
@@ -286,6 +309,10 @@ const TechNews = () => {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => setOpenAddDialog(true)}
+              fullWidth={matches}
+              sx={{ 
+                width: { xs: '100%', md: 'auto' }
+              }}
             >
               Add Article
             </AddButton>
