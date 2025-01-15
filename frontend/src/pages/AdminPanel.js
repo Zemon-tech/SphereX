@@ -19,6 +19,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -69,6 +70,7 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [stats, setStats] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -114,34 +116,50 @@ const AdminPanel = () => {
     );
   }
 
+  const handleCardClick = (type) => {
+    navigate(`/admin/analytics/${type}`);
+  };
+
   const statCards = [
     {
       title: 'Users',
       count: stats?.counts?.users || 0,
       icon: <PeopleIcon />,
-      progress: 75,
-      subtitle: 'Active platform users'
+      progress: stats?.growth?.users || 0,
+      subtitle: 'Active platform users',
+      type: 'users'
     },
     {
       title: 'News Articles',
       count: stats?.counts?.news || 0,
       icon: <ArticleIcon />,
-      progress: 60,
-      subtitle: 'Published articles'
+      progress: stats?.growth?.news || 0,
+      subtitle: 'Published articles',
+      type: 'news'
     },
     {
       title: 'Projects',
       count: stats?.counts?.projects || 0,
       icon: <CodeIcon />,
-      progress: 85,
-      subtitle: 'Showcased projects'
+      progress: stats?.growth?.projects || 0,
+      subtitle: 'Showcased projects',
+      type: 'projects'
     },
     {
       title: 'Tools',
       count: stats?.counts?.tools || 0,
       icon: <BuildIcon />,
-      progress: 45,
-      subtitle: 'Available tools'
+      progress: stats?.growth?.tools || 0,
+      subtitle: 'Available tools',
+      type: 'tools'
+    },
+    {
+      title: 'Hackathons',
+      count: stats?.counts?.hackathons || 0,
+      icon: <CodeIcon />,
+      progress: stats?.growth?.hackathons || 0,
+      subtitle: 'Active hackathons',
+      type: 'hackathons'
     }
   ];
 
@@ -189,7 +207,16 @@ const AdminPanel = () => {
       <Grid container spacing={3}>
         {statCards.map((stat, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <StyledCard>
+            <StyledCard 
+              onClick={() => handleCardClick(stat.type)}
+              sx={{ 
+                cursor: 'pointer',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 16px 40px rgba(0,0,0,0.12)',
+                }
+              }}
+            >
               <CardContent sx={{ position: 'relative', zIndex: 1 }}>
                 <StatIcon>
                   {stat.icon}
@@ -225,7 +252,7 @@ const AdminPanel = () => {
                     opacity: 0.8
                   }}
                 >
-                  {stat.progress}% Growth
+                  {stat.progress}% Growth this month
                 </Typography>
               </CardContent>
             </StyledCard>

@@ -145,32 +145,82 @@ const ToolCard = ({ tool, onUpdate }) => {
     event.stopPropagation();
   };
 
+  const handleVisitClick = async (event) => {
+    event.stopPropagation();
+    try {
+      await api.post(`/tools/${tool._id}/visit`);
+    } catch (error) {
+      console.error('Error tracking visit:', error);
+    }
+  };
+
   return (
     <StyledCard 
       onClick={handleCardClick}
       sx={{ cursor: 'pointer' }}
     >
       {isAdmin && (
-        <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 2 }}>
+        <Box sx={{ 
+          position: 'absolute', 
+          top: 12,
+          right: 12,
+          zIndex: 2,
+          opacity: 0,
+          transition: 'opacity 0.2s ease',
+          '.MuiCard-root:hover &': {
+            opacity: 1
+          },
+          '@media (max-width: 600px)': {
+            opacity: 0.8,
+            top: 8,
+            right: 8,
+          }
+        }}>
           <IconButton 
             onClick={handleMenuOpen} 
+            size="small"
             sx={{ 
               backgroundColor: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(4px)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              padding: '6px',
               '&:hover': {
                 backgroundColor: 'rgba(255,255,255,0.95)',
+                transform: 'scale(1.05)'
               }
             }}
           >
-            <MoreVertIcon />
+            <MoreVertIcon fontSize="small" />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
             onClick={(e) => e.stopPropagation()}
+            PaperProps={{
+              sx: {
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                borderRadius: '12px',
+                minWidth: '120px',
+                mt: 1
+              }
+            }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
-            <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            <MenuItem 
+              onClick={handleDelete}
+              sx={{ 
+                fontSize: '0.875rem',
+                py: 1,
+                color: 'error.main',
+                '&:hover': {
+                  backgroundColor: 'error.lighter'
+                }
+              }}
+            >
+              Delete
+            </MenuItem>
           </Menu>
         </Box>
       )}
@@ -272,7 +322,10 @@ const ToolCard = ({ tool, onUpdate }) => {
               target="_blank" 
               rel="noopener noreferrer"
               sx={{ flex: 1, textDecoration: 'none' }}
-              onClick={handleButtonClick}
+              onClick={(e) => {
+                handleButtonClick(e);
+                handleVisitClick(e);
+              }}
             >
               <ActionButton
                 fullWidth

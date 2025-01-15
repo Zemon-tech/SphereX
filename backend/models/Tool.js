@@ -34,7 +34,18 @@ const toolSchema = new mongoose.Schema({
   averageRating: {
     type: Number,
     default: 0
-  }
+  },
+  visits: {
+    type: Number,
+    default: 0
+  },
+  visitHistory: [{
+    timestamp: {
+      type: Date,
+      default: Date.now
+    },
+    userId: String
+  }]
 });
 
 // Add method to calculate average rating

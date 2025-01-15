@@ -21,6 +21,9 @@ import About from './pages/about/About';
 import Contact from './pages/contact/Contact';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import Founders from './pages/about/Founders';
+import Hackathons from './pages/Hackathons';
+import HackathonDetail from './pages/HackathonDetail';
+import Analytics from './pages/admin/Analytics';
 
 // Create a wrapper component that uses useAuth
 const AppRoutes = () => {
@@ -60,6 +63,9 @@ const AppRoutes = () => {
             <Route path="/founders" element={<Founders />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/hackathons" element={<Hackathons />} />
+            <Route path="/hackathons/:id" element={<HackathonDetail />} />
+            <Route path="/admin/analytics/:type" element={<Analytics />} />
           </Routes>
         </main>
         <Footer />

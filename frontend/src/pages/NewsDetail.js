@@ -38,6 +38,20 @@ const NewsDetail = () => {
     fetchNewsDetail();
   }, [id]);
 
+  useEffect(() => {
+    const trackVisit = async () => {
+      try {
+        await api.post(`/news/${id}/visit`);
+      } catch (error) {
+        console.error('Error tracking visit:', error);
+      }
+    };
+
+    if (id) {
+      trackVisit();
+    }
+  }, [id]);
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>

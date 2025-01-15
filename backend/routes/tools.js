@@ -149,4 +149,29 @@ router.post('/:id/rate', authMiddleware, async (req, res) => {
   }
 });
 
+// Add visit tracking route
+router.post('/:id/visit', async (req, res) => {
+  try {
+    const tool = await Tool.findById(req.params.id);
+    if (!tool) {
+      return res.status(404).json({ message: 'Tool not found' });
+    }
+
+    // Increment visits
+    tool.visits = (tool.visits || 0) + 1;
+    
+    // Add visit to history
+    tool.visitHistory.push({
+      timestamp: new Date(),
+      userId: req.user?.uid || 'anonymous'
+    });
+
+    await tool.save();
+    res.json({ visits: tool.visits });
+  } catch (error) {
+    console.error('Error tracking visit:', error);
+    res.status(500).json({ message: 'Error tracking visit' });
+  }
+});
+
 module.exports = router; 

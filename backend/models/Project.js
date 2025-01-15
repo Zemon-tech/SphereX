@@ -33,7 +33,18 @@ const projectSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  visits: {
+    type: Number,
+    default: 0
+  },
+  visitHistory: [{
+    timestamp: {
+      type: Date,
+      default: Date.now
+    },
+    userId: String
+  }]
 });
 
 module.exports = mongoose.model('Project', projectSchema); 

@@ -28,6 +28,7 @@ app.use('/api', express.Router()
   .use('/tools', require('./routes/tools'))
   .use('/users', require('./routes/users'))
   .use('/admin', require('./routes/admin'))
+  .use('/hackathons', require('./routes/hackathons'))
   .use('/test', require('./routes/test'))
 );
 

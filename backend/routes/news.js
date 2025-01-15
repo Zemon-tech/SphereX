@@ -110,4 +110,29 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   }
 });
 
+// Add visit tracking route
+router.post('/:id/visit', async (req, res) => {
+  try {
+    const news = await News.findById(req.params.id);
+    if (!news) {
+      return res.status(404).json({ message: 'News not found' });
+    }
+
+    // Increment visits
+    news.visits = (news.visits || 0) + 1;
+    
+    // Add visit to history
+    news.visitHistory.push({
+      timestamp: new Date(),
+      userId: req.user?.uid || 'anonymous'
+    });
+
+    await news.save();
+    res.json({ visits: news.visits });
+  } catch (error) {
+    console.error('Error tracking visit:', error);
+    res.status(500).json({ message: 'Error tracking visit' });
+  }
+});
+
 module.exports = router; 

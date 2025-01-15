@@ -19,6 +19,7 @@ import {
   Article as ArticleIcon,
   Code as CodeIcon,
   Store as StoreIcon,
+  EmojiEvents as HackathonIcon,
   AdminPanelSettings as AdminPanelSettingsIcon,
   Person as PersonIcon,
   Login as LoginIcon,
@@ -194,50 +195,45 @@ const Navbar = () => {
     if (to) navigate(to);
   };
 
+  const navItems = [
+    { label: 'Tech News', path: '/tech-news', icon: <ArticleIcon /> },
+    { label: 'Projects', path: '/projects', icon: <CodeIcon /> },
+    { label: 'WebStore', path: '/webstore', icon: <StoreIcon /> },
+    { label: 'Hackathons', path: '/hackathons', icon: <HackathonIcon /> },
+  ];
+
+  const adminItems = [
+    { label: 'Admin Panel', path: '/admin', icon: <AdminPanelSettingsIcon /> },
+  ];
+
   const mobileMenu = (
     <Box>
       <List>
-        <ListItem>
-          <MobileMenuItem 
-            component={Link} 
-            to="/tech-news"
-            onClick={() => handleMobileMenuClick('/tech-news')}
-            startIcon={<ArticleIcon />}
-          >
-            Tech News
-          </MobileMenuItem>
-        </ListItem>
-        <ListItem>
-          <MobileMenuItem 
-            component={Link} 
-            to="/projects"
-            onClick={() => handleMobileMenuClick('/projects')}
-            startIcon={<CodeIcon />}
-          >
-            Projects
-          </MobileMenuItem>
-        </ListItem>
-        <ListItem>
-          <MobileMenuItem 
-            component={Link} 
-            to="/webstore"
-            onClick={() => handleMobileMenuClick('/webstore')}
-            startIcon={<StoreIcon />}
-          >
-            WebStore
-          </MobileMenuItem>
-        </ListItem>
-        {isAdmin && (
-          <ListItem>
+        {navItems.map((item) => (
+          <ListItem key={item.path}>
             <MobileMenuItem 
               component={Link} 
-              to="/admin"
-              onClick={() => handleMobileMenuClick('/admin')}
-              startIcon={<AdminPanelSettingsIcon />}
+              to={item.path}
+              onClick={() => handleMobileMenuClick(item.path)}
+              startIcon={item.icon}
             >
-              Admin Panel
+              {item.label}
             </MobileMenuItem>
           </ListItem>
+        ))}
+        {isAdmin && (
+          adminItems.map((item) => (
+            <ListItem key={item.path}>
+              <MobileMenuItem 
+                component={Link} 
+                to={item.path}
+                onClick={() => handleMobileMenuClick(item.path)}
+                startIcon={item.icon}
+              >
+                {item.label}
+              </MobileMenuItem>
+            </ListItem>
+          ))
         )}
         {currentUser ? (
           <>
@@ -300,32 +296,29 @@ const Navbar = () => {
           </MobileMenuButton>
 
           <NavLinks>
-            <NavButton component={StyledLink} to="/tech-news">
-              Tech News
-            </NavButton>
-            <NavButton component={StyledLink} to="/projects">
-              Projects
-            </NavButton>
-            <NavButton component={StyledLink} to="/webstore">
-              WebStore
-            </NavButton>
+            <IconButton
+              sx={{ display: { md: 'none' }, color: '#fff' }}
+              onClick={(e) => setMobileOpen(e.currentTarget)}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            {/* Desktop Navigation */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              {navItems.map((item) => (
+                <NavButton key={item.path} component={StyledLink} to={item.path}>
+                  {item.label}
+                </NavButton>
+              ))}
+              {isAdmin && adminItems.map((item) => (
+                <NavButton key={item.path} component={StyledLink} to={item.path}>
+                  {item.label}
+                </NavButton>
+              ))}
+            </Box>
 
             {currentUser ? (
               <>
-                {isAdmin && (
-                  <NavButton 
-                    component={Link} 
-                    to="/admin"
-                    sx={{ 
-                      background: alpha('#fff', 0.1),
-                      '&:hover': {
-                        background: alpha('#fff', 0.15),
-                      }
-                    }}
-                  >
-                    Admin Panel
-                  </NavButton>
-                )}
                 <IconButton onClick={handleMenu} sx={{ ml: 1 }}>
                   <StyledAvatar 
                     src={currentUser.photoURL} 
