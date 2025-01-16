@@ -24,6 +24,7 @@ import Founders from './pages/about/Founders';
 import Hackathons from './pages/Hackathons';
 import HackathonDetail from './pages/HackathonDetail';
 import Analytics from './pages/admin/Analytics';
+import { Analytics } from "@vercel/analytics/react"
 
 // Create a wrapper component that uses useAuth
 const AppRoutes = () => {
