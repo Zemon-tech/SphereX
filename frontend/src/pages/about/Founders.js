@@ -175,7 +175,7 @@ const Founders = () => {
                   alt="Madhav Varshney"
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/400x400?text=MV';
+                    e.target.src = 'https://media.licdn.com/dms/image/v2/D5603AQHDTlzZ1RO4Cw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1727323742336?e=1742428800&v=beta&t=foO8flnxvxvpF0XdVsCoDK7dzHyOvem6ttZkgiLd6z8';
                   }}
                 />
               </ImageContainer>
