@@ -7,7 +7,7 @@ const path = require('path');
 const News = require('./models/News');
 const routeLogger = require('./middleware/routeLogger');
 const indexRouter = require('./routes/index');
-import { Analytics } from "@vercel/analytics/react"
+
 
 const app = express();
 
